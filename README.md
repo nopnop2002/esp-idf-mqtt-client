@@ -30,6 +30,7 @@ You can use the MDNS hostname instead of the IP address.
  If you set CONFIG_MDNS_STRICT_MODE = y in sdkconfig.default, the firmware will be built with MDNS_STRICT_MODE = 1.
 
 ![config-app-2](https://user-images.githubusercontent.com/6020549/139746873-09ab4d54-c6f1-41a3-bb2e-6a0ea65d3be7.jpg)
+![mqtt-client-2](https://user-images.githubusercontent.com/6020549/139753130-ce044b46-daac-4540-836a-192d8d528809.jpg)
 
 # How to use
 - Open browser.   
