@@ -2,7 +2,7 @@
 MQTT Client for esp-idf.   
 I used [this](https://github.com/Molorius/esp32-websocket) component.   
 This component can communicate directly with the browser.   
-There is [example](https://github.com/Molorius/ESP32-Examples).   
+There is an example of using the component [here](https://github.com/Molorius/ESP32-Examples).
 It's a great job.   
 
 I use [this](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Electron) HTML & CSS.   
