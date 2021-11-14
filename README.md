@@ -1,5 +1,5 @@
 # esp-idf-mqtt-client
-MQTT Client for esp-idf.   
+GUI MQTT Client for esp-idf.   
 I used [this](https://github.com/Molorius/esp32-websocket) component.   
 This component can communicate directly with the browser.   
 There is an example of using the component [here](https://github.com/Molorius/ESP32-Examples).
@@ -38,7 +38,7 @@ You can use the MDNS hostname instead of the IP address.
 # How to use
 - Open browser.   
 - Enter the esp32 address in your browser's address bar.
-- Press Connect button.   
+- Press Connect button. You can use broker.emqx.io.   
 - Press Subscribe button.   
 - Enter the payload and press the Send button.   
 
