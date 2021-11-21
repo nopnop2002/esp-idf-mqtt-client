@@ -596,7 +596,11 @@ void app_main() {
 				len = makeSendText(out, "MQTT", topic, payload, "");
 				ws_server_send_text_all(out,len);
 			} // end of subscribe-data
-		}
-	}
+		} // end if
+
+		// Delete a cJSON structure
+		cJSON_Delete(root);
+
+	} // end while
 
 }
