@@ -5,7 +5,8 @@ This component can communicate directly with the browser.
 There is an example of using the component [here](https://github.com/Molorius/ESP32-Examples).
 It's a great job.   
 
-I use [this](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Electron) HTML & CSS.   
+I use [this](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Electron) HTML.   
+I use [this](https://bulma.io/) open source framework.   
 
 ![mqtt-client](https://user-images.githubusercontent.com/6020549/139746798-d83496dd-3f3f-471d-bc9e-b9baaf9bdc01.jpg)
 
