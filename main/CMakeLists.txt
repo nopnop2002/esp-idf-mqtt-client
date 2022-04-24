@@ -4,5 +4,4 @@ idf_component_register(SRCS "main.c" "mqtt.c"
 								"../html/favicon.ico"
 								"../html/main.js"
 								"../html/root.html"
-								"../html/bulma.css"
 								"../html/main.css")

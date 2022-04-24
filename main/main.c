@@ -254,11 +254,6 @@ static void http_serve(struct netconn *conn) {
 	extern const uint8_t main_css_end[] asm("_binary_main_css_end");
 	const uint32_t main_css_len = main_css_end - main_css_start;
 
-	// bulma.css
-	extern const uint8_t bulma_css_start[] asm("_binary_bulma_css_start");
-	extern const uint8_t bulma_css_end[] asm("_binary_bulma_css_end");
-	const uint32_t bulma_css_len = bulma_css_end - bulma_css_start;
-
 	// favicon.ico
 	extern const uint8_t favicon_ico_start[] asm("_binary_favicon_ico_start");
 	extern const uint8_t favicon_ico_end[] asm("_binary_favicon_ico_end");
@@ -310,15 +305,6 @@ static void http_serve(struct netconn *conn) {
 				ESP_LOGI(TAG,"Sending /main.css");
 				netconn_write(conn, CSS_HEADER, sizeof(CSS_HEADER)-1,NETCONN_NOCOPY);
 				netconn_write(conn, main_css_start, main_css_len,NETCONN_NOCOPY);
-				netconn_close(conn);
-				netconn_delete(conn);
-				netbuf_delete(inbuf);
-			}
-
-			else if(strstr(buf,"GET /bulma.css ")) {
-				ESP_LOGI(TAG,"Sending /bulma.css");
-				netconn_write(conn, CSS_HEADER, sizeof(CSS_HEADER)-1,NETCONN_NOCOPY);
-				netconn_write(conn, bulma_css_start, bulma_css_len,NETCONN_NOCOPY);
 				netconn_close(conn);
 				netconn_delete(conn);
 				netbuf_delete(inbuf);
@@ -502,10 +488,10 @@ void app_main() {
 	configASSERT( xMessageBufferMqtt );
 
 	/* Get the local IP address */
-	tcpip_adapter_ip_info_t ip_info;
-	ESP_ERROR_CHECK(tcpip_adapter_get_ip_info(TCPIP_ADAPTER_IF_STA, &ip_info));
+	esp_netif_ip_info_t ip_info;
+	ESP_ERROR_CHECK(esp_netif_get_ip_info(esp_netif_get_handle_from_ifkey("WIFI_STA_DEF"), &ip_info));
 	char cparam0[64];
-	sprintf(cparam0, "%s", ip4addr_ntoa(&ip_info.ip));
+	sprintf(cparam0, IPSTR, IP2STR(&ip_info.ip));
 
 	ws_server_start();
 	xTaskCreate(&server_task, "server_task", 1024*2, (void *)cparam0, 9, NULL);
@@ -517,7 +503,7 @@ void app_main() {
 
 	while(1) {
 		size_t readBytes = xMessageBufferReceive(xMessageBufferMain, cRxBuffer, sizeof(cRxBuffer), portMAX_DELAY );
-		ESP_LOGI(pcTaskGetTaskName(NULL), "readBytes=%d", readBytes);
+		ESP_LOGI(TAG, "readBytes=%d", readBytes);
 		cJSON *root = cJSON_Parse(cRxBuffer);
 		if (cJSON_GetObjectItem(root, "id")) {
 			char *id = cJSON_GetObjectItem(root,"id")->valuestring;

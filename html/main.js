@@ -17,7 +17,6 @@ function getTextValueByName(name) {
 	return ret;
 }
 
-
 function sendText(name) {
 	console.log('sendText');
 /*

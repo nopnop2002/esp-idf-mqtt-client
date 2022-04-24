@@ -9,15 +9,12 @@ I use [this](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-clien
 
 ![mqtt-client](https://user-images.githubusercontent.com/6020549/139746798-d83496dd-3f3f-471d-bc9e-b9baaf9bdc01.jpg)
 
-# Hardware requiment
-Requires ESP32 with Flash Size 4M.   
-__Models with a Flash Size 2M, such as the ESP32-C3, cannot be used.__   
-
 # Installation
 ```
 git clone https://github.com/nopnop2002/esp-idf-mqtt-client
 cd esp-idf-mqtt-client
 git clone https://github.com/Molorius/esp32-websocket components/websocket
+idf.py set-target {esp32/esp32s2/esp32s3/esp32c3}
 idf.py menuconfig
 idf.py flash monitor
 ```
@@ -42,6 +39,9 @@ You can use the MDNS hostname instead of the IP address.
 - Press Subscribe button.   
 - Enter the payload and press the Send button.   
 
+You can publish new topic using mqtt_pub.sh.   
+- Open terminal.   
+- Start mqtt_pub.sh.   
 
 # Task Structure Diagram
 ![Task_structure_diagram](https://user-images.githubusercontent.com/6020549/139747430-1257fc80-7519-4d6e-80d7-740adc2e0e17.JPG)
