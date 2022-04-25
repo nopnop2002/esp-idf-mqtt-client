@@ -44,5 +44,8 @@ You can publish new topic using mqtt_pub.sh.
 - Open terminal.   
 - Start mqtt_pub.sh.   
 
+# Reference
+https://github.com/nopnop2002/esp-idf-mqtt-image-client
+
 # Task Structure Diagram
 ![Task_structure_diagram](https://user-images.githubusercontent.com/6020549/139747430-1257fc80-7519-4d6e-80d7-740adc2e0e17.JPG)
