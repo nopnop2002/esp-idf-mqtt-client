@@ -6,7 +6,10 @@
 	 CONDITIONS OF ANY KIND, either express or implied.
 */
 
-#include "string.h"
+#include <stdio.h>
+#include <inttypes.h>
+#include <string.h>
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
@@ -209,10 +212,10 @@ void websocket_callback(uint8_t num,WEBSOCKET_TYPE_t type,char* msg,uint64_t len
 			}
 			break;
 		case WEBSOCKET_BIN:
-			ESP_LOGI(TAG,"client %i sent binary message of size %i:\n%s",num,(uint32_t)len,msg);
+			ESP_LOGI(TAG,"client %i sent binary message of size %"PRIu32":\n%s",num,(uint32_t)len,msg);
 			break;
 		case WEBSOCKET_PING:
-			ESP_LOGI(TAG,"client %i pinged us with message of size %i:\n%s",num,(uint32_t)len,msg);
+			ESP_LOGI(TAG,"client %i pinged us with message of size %"PRIu32":\n%s",num,(uint32_t)len,msg);
 			break;
 		case WEBSOCKET_PONG:
 			ESP_LOGI(TAG,"client %i responded to the ping",num);
@@ -271,7 +274,7 @@ static void http_serve(struct netconn *conn) {
 
 			ESP_LOGD(TAG, "buf=[%s]", buf);
 			// default page
-			if		 (strstr(buf,"GET / ")
+			if (strstr(buf,"GET / ")
 					&& !strstr(buf,"Upgrade: websocket")) {
 				ESP_LOGI(TAG,"Sending /");
 				netconn_write(conn, HTML_HEADER, sizeof(HTML_HEADER)-1,NETCONN_NOCOPY);
@@ -283,7 +286,7 @@ static void http_serve(struct netconn *conn) {
 
 			// default page websocket
 			else if(strstr(buf,"GET / ")
-					 && strstr(buf,"Upgrade: websocket")) {
+					&& strstr(buf,"Upgrade: websocket")) {
 				ESP_LOGI(TAG,"Requesting websocket on /");
 				ws_server_add_client(conn,buf,buflen,"/",websocket_callback);
 				netbuf_delete(inbuf);
