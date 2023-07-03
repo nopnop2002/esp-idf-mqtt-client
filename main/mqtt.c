@@ -194,6 +194,8 @@ void object2text(cJSON * request, TEXT_t *textBuf) {
 	ESP_LOGD(TAG, "textBuf.payload=[%s]", textBuf->payload);
 }
 
+esp_err_t query_mdns_host(const char * host_name, char *ip);
+void convert_mdns_host(char * from, char * to);
 
 void mqtt(void *pvParameters)
 {
@@ -267,13 +269,21 @@ void mqtt(void *pvParameters)
 				ESP_LOGI(TAG, "textBuf.payload=[%s]", textBuf.payload);
 #endif
 
+
+				// Resolve mDNS host name
+				char ip[128];
+				ESP_LOGI(TAG, "textBuf.host=[%s]", textBuf.host);
+				convert_mdns_host(textBuf.host, ip);
+				ESP_LOGI(TAG, "ip=[%s]", ip);
+				char uri[138];
+				sprintf(uri, "mqtt://%s", ip);
+				//sprintf(uri,"mqtt://%s", textBuf.host);
 				uint32_t port = strtol( textBuf.port, NULL, 10 );
-				char url[64];
-				sprintf(url,"mqtt://%s", textBuf.host);
-				ESP_LOGI(TAG, "url=[%s] port=%"PRIu32, url, port);
+				ESP_LOGI(TAG, "uri=[%s] port=%"PRIu32, uri, port);
+
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)
 				esp_mqtt_client_config_t mqtt_cfg = {
-					.broker.address.uri = url,
+					.broker.address.uri = uri,
 					.broker.address.port = port,
 					.credentials.client_id = textBuf.clientId,
 				};
@@ -285,7 +295,7 @@ void mqtt(void *pvParameters)
 				}
 #else
 				esp_mqtt_client_config_t mqtt_cfg = {
-					.uri = url,
+					.uri = uri,
 					.port = port,
 					.client_id = textBuf.clientId,
 					.event_handle = mqtt_event_handler

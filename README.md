@@ -41,7 +41,10 @@ You can use the MDNS hostname instead of the IP address.
 - Enter the esp32 address in your browser's address bar.   
 - You can use the mDNS hostname instead of the IP address.   
  Default mDNS name is esp32-server.local.   
-- Press Connect button. You can use broker.emqx.io.   
+- Enter Host & port.   
+ You can specify the mDNS host name like mqtt-broker.local for the host name.   
+ You can use broker.emqx.io.   
+ Press Connect button.   
 - Press Subscribe button.   
 - Enter the payload and press the Send button.   
 

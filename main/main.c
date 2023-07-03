@@ -445,6 +445,51 @@ static void time_task(void* pvParameters) {
 	}
 }
 
+esp_err_t query_mdns_host(const char * host_name, char *ip)
+{
+	ESP_LOGD(__FUNCTION__, "Query A: %s", host_name);
+
+	struct esp_ip4_addr addr;
+	addr.addr = 0;
+
+	esp_err_t err = mdns_query_a(host_name, 10000,	&addr);
+	if(err){
+		if(err == ESP_ERR_NOT_FOUND){
+			ESP_LOGW(__FUNCTION__, "%s: Host was not found!", esp_err_to_name(err));
+			return ESP_FAIL;
+		}
+		ESP_LOGE(__FUNCTION__, "Query Failed: %s", esp_err_to_name(err));
+		return ESP_FAIL;
+	}
+
+	ESP_LOGD(__FUNCTION__, "Query A: %s.local resolved to: " IPSTR, host_name, IP2STR(&addr));
+	sprintf(ip, IPSTR, IP2STR(&addr));
+	return ESP_OK;
+}
+
+void convert_mdns_host(char * from, char * to)
+{
+	ESP_LOGI(__FUNCTION__, "from=[%s]",from);
+	strcpy(to, from);
+	char *sp;
+	sp = strstr(from, ".local");
+	if (sp == NULL) return;
+
+	int _len = sp - from;
+	ESP_LOGD(__FUNCTION__, "_len=%d", _len);
+	char _from[128];
+	strcpy(_from, from);
+	_from[_len] = 0;
+	ESP_LOGI(__FUNCTION__, "_from=[%s]", _from);
+
+	char _ip[128];
+	esp_err_t ret = query_mdns_host(_from, _ip);
+	ESP_LOGI(__FUNCTION__, "query_mdns_host=%d _ip=[%s]", ret, _ip);
+	if (ret != ESP_OK) return;
+
+	strcpy(to, _ip);
+	ESP_LOGI(__FUNCTION__, "to=[%s]", to);
+}
 
 void mqtt(void *pvParameters);
 
@@ -457,8 +502,10 @@ void app_main() {
 	}
 	ESP_ERROR_CHECK(ret);
 
-	ESP_LOGI(TAG, "ESP_WIFI_MODE_STA");
+	// Start WiFi
 	wifi_init_sta();
+
+	// Initialize mDNS
 	initialise_mdns();
 
 	// Get current time
