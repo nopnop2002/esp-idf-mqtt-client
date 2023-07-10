@@ -28,6 +28,12 @@
 
 #include "mqtt.h"
 
+#if (ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0))
+#define sntp_setoperatingmode esp_sntp_setoperatingmode
+#define sntp_setservername esp_sntp_setservername
+#define sntp_init esp_sntp_init
+#endif
+
 static QueueHandle_t client_queue;
 MessageBufferHandle_t xMessageBufferMain;
 MessageBufferHandle_t xMessageBufferMqtt;
@@ -494,7 +500,7 @@ void convert_mdns_host(char * from, char * to)
 void mqtt(void *pvParameters);
 
 void app_main() {
-	//Initialize NVS
+	// Initialize NVS
 	esp_err_t ret = nvs_flash_init();
 	if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
 		ESP_ERROR_CHECK(nvs_flash_erase());

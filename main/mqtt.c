@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/event_groups.h"
@@ -268,7 +269,6 @@ void mqtt(void *pvParameters)
 				ESP_LOGI(TAG, "textBuf.qosPub=[%s]", textBuf.qosPub);
 				ESP_LOGI(TAG, "textBuf.payload=[%s]", textBuf.payload);
 #endif
-
 
 				// Resolve mDNS host name
 				char ip[128];
