@@ -11,7 +11,9 @@ I use [this](https://bulma.io/) open source framework.
 ![mqtt-client](https://user-images.githubusercontent.com/6020549/139746798-d83496dd-3f3f-471d-bc9e-b9baaf9bdc01.jpg)
 
 # Software requirements
-esp-idf v4.4/v5.0.   
+ESP-IDF V4.4/V5.x.   
+ESP-IDF V5.0 is required when using ESP32C2.   
+ESP-IDF V5.1 is required when using ESP32C6.   
 
 # Installation
 ```
