@@ -409,10 +409,10 @@ static void server_handle_task(void* pvParameters) {
 }
 
 /*
-v1:ID/NAME
-v2:id/name
-v3:propaty
-v4:value
+makeSendText(out, "TEXT", "datetime", strftime_buf, "");
+makeSendText(out, "HIDDEN", "connectBtn", "", "");
+makeSendText(out, "VISIBLE", "disconnectBtn", "", "");
+makeSendText(out, "MQTT", topic, payload, "");
 */
 static int makeSendText(char* buf, char* v1, char* v2, char* v3, char* v4)
 {
@@ -438,7 +438,7 @@ static void time_task(void* pvParameters) {
 		ESP_LOGD(TAG, "The current time is: %s", strftime_buf);
 
 		char out[64];
-		int len = makeSendText(out, "ID", "datetime", "value", strftime_buf);
+		int len = makeSendText(out, "TEXT", "datetime", strftime_buf, "");
 		int clients = ws_server_send_text_all(out,len);
 		if(clients > 0) {
 			//ESP_LOGI(TAG,"sent: \"%s\" to %i clients",out,clients);
@@ -557,6 +557,14 @@ void app_main() {
 				if (sentBytes != readBytes) {
 					ESP_LOGE(TAG, "xMessageBufferSend fail");
 				}
+				char out[64];
+				int len;
+				len = makeSendText(out, "HIDDEN", "disconnectBtn", "", "");
+				ws_server_send_text_all(out,len);
+				len = makeSendText(out, "HIDDEN", "unsubscribeBtn", "", "");
+				ws_server_send_text_all(out,len);
+				len = makeSendText(out, "HIDDEN", "sendBtn", "", "");
+				ws_server_send_text_all(out,len);
 			} // end of init
 
 			if ( strcmp (id, "connect-request") == 0) {
@@ -572,7 +580,11 @@ void app_main() {
 				if (strcmp(result, "OK") == 0) {
 					char out[64];
 					int len;
-					len = makeSendText(out, "ID", "connectBtn", "value", "Connected");
+					len = makeSendText(out, "HIDDEN", "connectBtn", "", "");
+					ws_server_send_text_all(out,len);
+					len = makeSendText(out, "VISIBLE", "disconnectBtn", "", "");
+					ws_server_send_text_all(out,len);
+					len = makeSendText(out, "VISIBLE", "sendBtn", "", "");
 					ws_server_send_text_all(out,len);
 				}
 			} // end of connect-response
@@ -590,10 +602,18 @@ void app_main() {
 				if (strcmp(result, "OK") == 0) {
 					char out[64];
 					int len;
-					len = makeSendText(out, "ID", "connectBtn", "value", "Connect");
+					len = makeSendText(out, "VISIBLE", "connectBtn", "", "");
+					ws_server_send_text_all(out,len);
+					len = makeSendText(out, "HIDDEN", "disconnectBtn", "", "");
+					ws_server_send_text_all(out,len);
+					len = makeSendText(out, "VISIBLE", "subscribeBtn", "", "");
+					ws_server_send_text_all(out,len);
+					len = makeSendText(out, "HIDDEN", "unsubscribeBtn", "", "");
+					ws_server_send_text_all(out,len);
+					len = makeSendText(out, "HIDDEN", "sendBtn", "", "");
 					ws_server_send_text_all(out,len);
 				}
-			} // end of connect-response
+			} // end of disconnect-response
 
 			if ( strcmp (id, "subscribe-request") == 0) {
 				size_t sentBytes = xMessageBufferSend(xMessageBufferMqtt, cRxBuffer, readBytes, portMAX_DELAY);
@@ -602,12 +622,38 @@ void app_main() {
 				}
 			} // end of subscribe-request
 
+			if ( strcmp (id, "subscribe-response") == 0) {
+				char *result = cJSON_GetObjectItem(root,"result")->valuestring;
+				ESP_LOGI(TAG, "result=%s",result);
+				if (strcmp(result, "OK") == 0) {
+					char out[64];
+					int len;
+					len = makeSendText(out, "HIDDEN", "subscribeBtn", "", "");
+					ws_server_send_text_all(out,len);
+					len = makeSendText(out, "VISIBLE", "unsubscribeBtn", "", "");
+					ws_server_send_text_all(out,len);
+				}
+			} // end of subscribe-response
+
 			if ( strcmp (id, "unsubscribe-request") == 0) {
 				size_t sentBytes = xMessageBufferSend(xMessageBufferMqtt, cRxBuffer, readBytes, portMAX_DELAY);
 				if (sentBytes != readBytes) {
 					ESP_LOGE(TAG, "xMessageBufferSend fail");
 				}
 			} // end of unsubscribe-request
+
+			if ( strcmp (id, "unsubscribe-response") == 0) {
+				char *result = cJSON_GetObjectItem(root,"result")->valuestring;
+				ESP_LOGI(TAG, "result=%s",result);
+				if (strcmp(result, "OK") == 0) {
+					char out[64];
+					int len;
+					len = makeSendText(out, "VISIBLE", "subscribeBtn", "", "");
+					ws_server_send_text_all(out,len);
+					len = makeSendText(out, "HIDDEN", "unsubscribeBtn", "", "");
+					ws_server_send_text_all(out,len);
+				}
+			} // end of unsubscribe-response
 
 			if ( strcmp (id, "publish-request") == 0) {
 				size_t sentBytes = xMessageBufferSend(xMessageBufferMqtt, cRxBuffer, readBytes, portMAX_DELAY);

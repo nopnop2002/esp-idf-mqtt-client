@@ -72,15 +72,29 @@ websocket.onopen = function(evt) {
 
 websocket.onmessage = function(evt) {
 	var msg = evt.data;
-	console.log("msg=" + msg);
+	//console.log("msg=" + msg);
 	var values = msg.split('\4'); // \4 is EOT
-	console.log("values=" + values);
+	//console.log("values=" + values);
 	switch(values[0]) {
-		case 'ID':
-			console.log("ID values[1]=" + values[1]);
-			console.log("ID values[2]=" + values[2]);
-			console.log("ID values[3]=" + values[3]);
-			if (values[2] == "value") document.getElementById(values[1]).innerHTML = values[3];
+		case 'HIDDEN':
+			console.log("HIDDEN values[1]=" + values[1]);
+			document.getElementById(values[1]).style.visibility ="hidden";
+			break;
+
+		case 'VISIBLE':
+			console.log("VISIBLE values[1]=" + values[1]);
+			document.getElementById(values[1]).style.visibility ="visible";
+			break;
+
+		case 'TEXT':
+			document.getElementById(values[1]).innerHTML = values[2];
+			break;
+
+		case 'COLOR':
+			//console.log("ID values[1]=" + values[1]);
+			//console.log("ID values[2]=" + values[2]);
+			//console.log("ID values[3]=" + values[3]);
+			if (values[2] == "color") document.getElementById(values[1]).style.color = values[3];
 			if (values[2] == "bcolor") document.getElementById(values[1]).style.backgroundColor = values[3];
 			break;
 
