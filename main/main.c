@@ -561,6 +561,8 @@ void app_main() {
 				int len;
 				len = makeSendText(out, "HIDDEN", "disconnectBtn", "", "");
 				ws_server_send_text_all(out,len);
+				len = makeSendText(out, "HIDDEN", "subscribeBtn", "", "");
+				ws_server_send_text_all(out,len);
 				len = makeSendText(out, "HIDDEN", "unsubscribeBtn", "", "");
 				ws_server_send_text_all(out,len);
 				len = makeSendText(out, "HIDDEN", "sendBtn", "", "");
@@ -584,6 +586,8 @@ void app_main() {
 					ws_server_send_text_all(out,len);
 					len = makeSendText(out, "VISIBLE", "disconnectBtn", "", "");
 					ws_server_send_text_all(out,len);
+					len = makeSendText(out, "VISIBLE", "subscribeBtn", "", "");
+					ws_server_send_text_all(out,len);
 					len = makeSendText(out, "VISIBLE", "sendBtn", "", "");
 					ws_server_send_text_all(out,len);
 				}
@@ -606,7 +610,7 @@ void app_main() {
 					ws_server_send_text_all(out,len);
 					len = makeSendText(out, "HIDDEN", "disconnectBtn", "", "");
 					ws_server_send_text_all(out,len);
-					len = makeSendText(out, "VISIBLE", "subscribeBtn", "", "");
+					len = makeSendText(out, "HIDDEN", "subscribeBtn", "", "");
 					ws_server_send_text_all(out,len);
 					len = makeSendText(out, "HIDDEN", "unsubscribeBtn", "", "");
 					ws_server_send_text_all(out,len);
